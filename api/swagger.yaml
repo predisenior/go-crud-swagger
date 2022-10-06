@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Books API
+  description: API for Books
+  version: "1.0"
+servers:
+- url: http://localhost:3000/book
+  description: base URL for books API
+paths:
+  /books:
+    get:
+      description: 'get all books list '
+      parameters:
+      - name: title
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        examples:
+          golang:
+            description: introduction golang
+            value: golang
+      responses:
+        "200":
+          description: get all books succed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+    post:
+      description: create a new book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/books_body'
+            examples:
+              book:
+                description: create a new book
+                value:
+                  name: introduction golang
+                  author: noname
+                  publisher: alta
+        required: true
+      responses:
+        "201":
+          description: create a book succed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                book:
+                  description: A book saved
+                  value:
+                    id: 1
+                    name: introduction golang
+                    author: noname
+                    publishe: alta
+  /book/{id}:
+    get:
+      description: get book by id
+      parameters:
+      - name: id
+        in: path
+        description: book ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+        examples:
+          book:
+            description: Book's ID
+            value: 1
+      responses:
+        "200":
+          description: Book Founded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/books_body'
+              examples:
+                book:
+                  description: create a new book
+                  value:
+                    name: introduction golang
+                    author: noname
+                    publisher: alta
+    put:
+      parameters:
+      - name: id
+        in: path
+        description: book ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+        examples:
+          book:
+            description: Book's ID
+            value: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/book_id_body'
+            examples:
+              book:
+                description: update a book
+                value:
+                  name: introduction golang
+                  author: noname
+                  publisher: freedom
+        required: true
+      responses:
+        "200":
+          description: update book succed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book_id_body'
+              examples:
+                book:
+                  description: update a new book
+                  value:
+                    name: introduction golang basic
+                    author: noname
+                    publisher: alta
+    delete:
+      description: delete a book
+      parameters:
+      - name: id
+        in: path
+        description: book ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+        examples:
+          book:
+            description: Book's ID
+            value: 1
+      responses:
+        "200":
+          description: delete succed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                success:
+                  description: buku sukses dihapus
+                  value:
+                    message: book deleted
+components:
+  schemas:
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        publisher:
+          type: string
+      example:
+        author: author
+        publisher: publisher
+        id: 0
+        title: title
+    books_body:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        publisher:
+          type: string
+      example:
+        author: author
+        publisher: publisher
+        title: title
+    book_id_body:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        publisher:
+          type: string
+      example:
+        author: author
+        publisher: publisher
+        title: title
+    inline_response_200_1:
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: message
